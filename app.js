@@ -217,6 +217,13 @@ const GROUPS = [
 
 const ACTIONS = ["HEATING", "SURGE", "IMBALANCED", "FLAG_REVIEW", "QUIET"];
 
+const PATH = [
+  ["Connect", "Two Datagen sources land customers and trades. Each source topic has a JSON schema."],
+  ["Stream", "The symbol is the key, so each name stays in order on the tape."],
+  ["Process", "Flink windows, a count forecast, and a buy-then-sell match write one action."],
+  ["Govern", "Schema Registry holds the source schemas. The Flink tables are Avro."]
+];
+
 function rowsOf(id) {
   const feature = (window.DESK_SNAPSHOT.features || {})[id];
   return feature && Array.isArray(feature.rows) ? feature.rows : [];
@@ -432,6 +439,34 @@ function subgroupOf(group, featureId) {
   return (group.subgroups || []).find((sub) => sub.ids.includes(featureId)) || null;
 }
 
+function pageHead(kickerText, titleText, questionText) {
+  const kicker = document.createElement("p");
+  kicker.className = "kicker";
+  kicker.textContent = kickerText;
+  const title = document.createElement("h1");
+  title.textContent = titleText;
+  const question = document.createElement("p");
+  question.className = "question";
+  question.textContent = questionText;
+  return { kicker, title, question };
+}
+
+function pathStrip() {
+  const row = document.createElement("div");
+  row.className = "path";
+  for (const [name, copy] of PATH) {
+    const item = document.createElement("section");
+    item.className = "path-step";
+    const label = document.createElement("span");
+    label.textContent = name;
+    const text = document.createElement("p");
+    text.textContent = copy;
+    item.append(label, text);
+    row.appendChild(item);
+  }
+  return row;
+}
+
 function navButton(id, title) {
   const button = document.createElement("button");
   button.className = "nav-button";
@@ -516,18 +551,15 @@ function renderNav(activeId) {
 function renderOverview() {
   const main = document.querySelector(".main");
   main.innerHTML = "";
-  const kicker = document.createElement("p");
-  kicker.className = "kicker";
-  kicker.textContent = "Overview";
-  const title = document.createElement("h1");
-  title.textContent = "Market, customers, reversals, and decisions";
-  const question = document.createElement("p");
-  question.className = "question";
   const captured = window.DESK_SNAPSHOT.capturedAt;
-  question.textContent = captured
-    ? "Checks below use the captured sample, " + captured + "."
-    : "No captured sample is loaded. The live floor still follows the tape.";
-  main.append(kicker, title, question);
+  const head = pageHead(
+    "Overview",
+    "Market, customers, reversals, and decisions",
+    captured
+      ? "Checks below use the captured sample, " + captured + "."
+      : "No captured sample is loaded. The live floor still follows the tape."
+  );
+  main.append(head.kicker, head.title, head.question, pathStrip());
 
   const grid = document.createElement("div");
   grid.className = "summary";
@@ -537,7 +569,7 @@ function renderOverview() {
   leadHeading.textContent = "Floor";
   const leadCopy = document.createElement("p");
   leadCopy.className = "blurb";
-  leadCopy.textContent = "The ten-second book on the live tape, and the stream action with the counts that justified it.";
+  leadCopy.textContent = "A desk can see a name that is busy, one-sided, reversing, or worth a look while the prints are still arriving. The ten-second book shows that action beside the counts that justified it.";
   const leadLink = document.createElement("button");
   leadLink.className = "feature-link";
   leadLink.type = "button";
@@ -592,15 +624,8 @@ function renderFeature(id) {
   const main = document.querySelector(".main");
   main.innerHTML = "";
   const sub = subgroupOf(found.group, id);
-  const kicker = document.createElement("p");
-  kicker.className = "kicker";
-  kicker.textContent = found.group.label + " / " + sub.label;
-  const title = document.createElement("h1");
-  title.textContent = found.feature.title;
-  const question = document.createElement("p");
-  question.className = "question";
-  question.textContent = found.feature.question;
-  main.append(kicker, title, question);
+  const head = pageHead(found.group.label + " / " + sub.label, found.feature.title, found.feature.question);
+  main.append(head.kicker, head.title, head.question);
 
   const sheet = document.createElement("section");
   sheet.className = "sheet";
@@ -788,14 +813,11 @@ function clockPair(count, imbalance) {
 function renderFloor() {
   const main = document.querySelector(".main");
   main.innerHTML = "";
-  const kicker = document.createElement("p");
-  kicker.className = "kicker";
-  kicker.textContent = "Floor / Now";
-  const title = document.createElement("h1");
-  title.textContent = "Live floor";
-  const question = document.createElement("p");
-  question.className = "question";
-  question.textContent = "What did the stream just decide, which counts justified it, and what changed in the last ten seconds?";
+  const head = pageHead(
+    "Floor / Now",
+    "Live floor",
+    "What did the stream just decide, which counts justified it, and what changed in the last ten seconds?"
+  );
   const sheet = document.createElement("section");
   sheet.className = "sheet";
   const meter = document.createElement("div");
@@ -830,7 +852,7 @@ function renderFloor() {
   const tapeWrap = document.createElement("div");
   tapeWrap.className = "table-wrap";
   sheet.append(meter, boardWrap, tapeTitle, tapeWrap);
-  main.append(kicker, title, question, sheet);
+  main.append(head.kicker, head.title, head.question, sheet);
 
   const columns = ["Symbol", "Live read", "Trades", "Customers", "Imbalance", "Last", "Stream action", "Evidence", "Last change", "10s", "1 min"];
   const floorKeys = ["symbol", "liveRead", "liveCount", "liveCustomers", "liveImbalance", "lastPrice", "streamAction", "streamTs", "shiftTs", "windowCount", "horizonCount"];
