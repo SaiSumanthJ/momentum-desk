@@ -1040,6 +1040,7 @@ function renderFloor() {
     rateValue.textContent = String(state.perSecond);
     printValue.textContent = String(state.trades);
     streamValue.textContent = String(state.flink);
+    if (state.place) paintPlace(state.place);
     latest = state;
     floorTitle();
     sortMenu.inner.querySelectorAll(".sort-option").forEach((option, index) => {
@@ -1094,12 +1095,38 @@ function show(id) {
   history.replaceState(null, "", "#" + id);
 }
 
+function placeLine(source) {
+  if (!source) return "Reading the cluster";
+  const name = source.clusterId || source.broker || "";
+  const line = [name, source.region, source.cloud].filter(Boolean).join(" · ");
+  return line || "Reading the cluster";
+}
+
+function paintPlace(source) {
+  const node = document.querySelector(".cluster");
+  if (node) node.textContent = placeLine(source);
+}
+
+function loadPlace() {
+  const saved = window.DESK_FLOOR && window.DESK_FLOOR.place;
+  if (saved) paintPlace(saved);
+  fetch("/api/floor", { cache: "no-store" })
+    .then((res) => (res.ok ? res.json() : Promise.reject()))
+    .then((state) => {
+      if (state.place) paintPlace(state.place);
+    })
+    .catch(() => {
+      if (!saved) paintPlace(null);
+    });
+}
+
 function routeFromHash() {
   const next = location.hash.replace("#", "") || "overview";
   show(next === "floor" || featureById(next) ? next : "overview");
 }
 
 if (typeof document !== "undefined") {
+  loadPlace();
   window.addEventListener("hashchange", routeFromHash);
   routeFromHash();
 }

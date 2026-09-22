@@ -1,5 +1,5 @@
 window.DESK_SNAPSHOT = {
-  "capturedAt": "2026-09-22 17:48 IST, minute horizon and action changes at 18:56 IST",
+  "capturedAt": "2026-09-22 17:48 IST, minute horizon and action changes at 18:56 IST, profiles, matches, and later action changes refreshed 21:40 IST",
   "features": {
     "windows": {
       "columns": [
@@ -700,84 +700,54 @@ window.DESK_SNAPSHOT = {
       ],
       "rows": [
         {
+          "userid": "User_1",
+          "regionid": "Region_3",
+          "gender": "OTHER"
+        },
+        {
           "userid": "User_2",
           "regionid": "Region_3",
           "gender": "FEMALE"
         },
         {
-          "userid": "User_5",
-          "regionid": "Region_7",
-          "gender": "MALE"
-        },
-        {
           "userid": "User_2",
-          "regionid": "Region_6",
-          "gender": "MALE"
-        },
-        {
-          "userid": "User_6",
-          "regionid": "Region_9",
-          "gender": "FEMALE"
-        },
-        {
-          "userid": "User_5",
           "regionid": "Region_4",
-          "gender": "MALE"
-        },
-        {
-          "userid": "User_2",
-          "regionid": "Region_6",
-          "gender": "OTHER"
-        },
-        {
-          "userid": "User_6",
-          "regionid": "Region_2",
           "gender": "FEMALE"
         },
         {
-          "userid": "User_6",
-          "regionid": "Region_1",
-          "gender": "FEMALE"
-        },
-        {
-          "userid": "User_2",
-          "regionid": "Region_7",
-          "gender": "OTHER"
-        },
-        {
-          "userid": "User_6",
+          "userid": "User_3",
           "regionid": "Region_8",
           "gender": "OTHER"
         },
         {
+          "userid": "User_4",
+          "regionid": "Region_5",
+          "gender": "OTHER"
+        },
+        {
           "userid": "User_5",
+          "regionid": "Region_8",
+          "gender": "OTHER"
+        },
+        {
+          "userid": "User_6",
           "regionid": "Region_9",
           "gender": "MALE"
         },
         {
-          "userid": "User_6",
+          "userid": "User_7",
           "regionid": "Region_2",
-          "gender": "OTHER"
-        },
-        {
-          "userid": "User_6",
-          "regionid": "Region_5",
-          "gender": "OTHER"
-        },
-        {
-          "userid": "User_5",
-          "regionid": "Region_5",
           "gender": "FEMALE"
         },
         {
-          "userid": "User_6",
+          "userid": "User_8",
           "regionid": "Region_1",
-          "gender": "FEMALE"
+          "gender": "OTHER"
         },
         {
-          "userid": "User_6",
-          "regionid": "Region_3",
-          "gender": "FEMALE"
+          "userid": "User_9",
+          "regionid": "Region_7",
+          "gender": "MALE"
         }
       ]
     },
@@ -1287,188 +1257,196 @@ window.DESK_SNAPSHOT = {
           "second_price": "943"
         },
         {
-          "userid": "User_7",
+          "userid": "User_5",
+          "symbol": "ZWZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "876",
+          "second_price": "504"
+        },
+        {
+          "userid": "User_1",
           "symbol": "ZTEST",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "663",
-          "second_price": "920"
+          "first_price": "894",
+          "second_price": "980"
         },
         {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "372",
-          "second_price": "628"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "664",
-          "second_price": "203"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "503",
-          "second_price": "369"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "228",
-          "second_price": "453"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "799",
-          "second_price": "223"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "728",
-          "second_price": "499"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "72",
-          "second_price": "229"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "315",
-          "second_price": "970"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "936",
-          "second_price": "910"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "374",
-          "second_price": "632"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "184",
-          "second_price": "979"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "497",
-          "second_price": "78"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "518",
-          "second_price": "726"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "625",
-          "second_price": "777"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZTEST",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "454",
-          "second_price": "883"
-        },
-        {
-          "userid": "User_7",
+          "userid": "User_5",
           "symbol": "ZVV",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "838",
-          "second_price": "437"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZVV",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "239",
-          "second_price": "786"
-        },
-        {
-          "userid": "User_7",
-          "symbol": "ZVV",
-          "first_side": "BUY",
-          "second_side": "SELL",
-          "first_price": "129",
+          "first_price": "521",
           "second_price": "579"
         },
         {
           "userid": "User_7",
-          "symbol": "ZVV",
+          "symbol": "ZWZZT",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "538",
-          "second_price": "910"
+          "first_price": "714",
+          "second_price": "472"
+        },
+        {
+          "userid": "User_1",
+          "symbol": "ZBZX",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "596",
+          "second_price": "924"
+        },
+        {
+          "userid": "User_9",
+          "symbol": "ZBZX",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "5",
+          "second_price": "461"
+        },
+        {
+          "userid": "User_6",
+          "symbol": "ZVZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "874",
+          "second_price": "314"
+        },
+        {
+          "userid": "User_8",
+          "symbol": "ZWZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "502",
+          "second_price": "906"
+        },
+        {
+          "userid": "User_1",
+          "symbol": "ZJZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "96",
+          "second_price": "564"
+        },
+        {
+          "userid": "User_2",
+          "symbol": "ZBZX",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "363",
+          "second_price": "18"
+        },
+        {
+          "userid": "User_3",
+          "symbol": "ZTEST",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "953",
+          "second_price": "826"
         },
         {
           "userid": "User_7",
-          "symbol": "ZVV",
+          "symbol": "ZTEST",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "589",
-          "second_price": "427"
+          "first_price": "316",
+          "second_price": "919"
+        },
+        {
+          "userid": "User_5",
+          "symbol": "ZJZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "916",
+          "second_price": "701"
+        },
+        {
+          "userid": "User_5",
+          "symbol": "ZWZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "633",
+          "second_price": "821"
+        },
+        {
+          "userid": "User_6",
+          "symbol": "ZVZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "264",
+          "second_price": "656"
+        },
+        {
+          "userid": "User_5",
+          "symbol": "ZJZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "992",
+          "second_price": "8"
         },
         {
           "userid": "User_7",
-          "symbol": "ZVV",
+          "symbol": "ZXZZT",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "33",
-          "second_price": "711"
+          "first_price": "305",
+          "second_price": "280"
         },
         {
-          "userid": "User_7",
-          "symbol": "ZVV",
+          "userid": "User_4",
+          "symbol": "ZTEST",
           "first_side": "BUY",
           "second_side": "SELL",
-          "first_price": "771",
-          "second_price": "304"
+          "first_price": "547",
+          "second_price": "673"
+        },
+        {
+          "userid": "User_8",
+          "symbol": "ZTEST",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "776",
+          "second_price": "609"
+        },
+        {
+          "userid": "User_2",
+          "symbol": "ZWZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "495",
+          "second_price": "876"
+        },
+        {
+          "userid": "User_6",
+          "symbol": "ZTEST",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "339",
+          "second_price": "459"
+        },
+        {
+          "userid": "User_4",
+          "symbol": "ZJZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "530",
+          "second_price": "960"
+        },
+        {
+          "userid": "User_9",
+          "symbol": "ZJZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "618",
+          "second_price": "574"
+        },
+        {
+          "userid": "User_1",
+          "symbol": "ZWZZT",
+          "first_side": "BUY",
+          "second_side": "SELL",
+          "first_price": "310",
+          "second_price": "925"
         }
       ]
     },
@@ -2006,109 +1984,151 @@ window.DESK_SNAPSHOT = {
       ],
       "rows": [
         {
-          "symbol": "ZVV",
+          "symbol": "ZXZZT",
           "from_action": "HEATING",
           "to_action": "QUIET",
-          "trade_count": "19",
-          "imbalance": "-0.6512352459676012"
+          "trade_count": "18",
+          "imbalance": "-0.15223729689994261"
         },
         {
-          "symbol": "ZVV",
-          "from_action": "QUIET",
-          "to_action": "SURGE",
-          "trade_count": "8",
-          "imbalance": "0.3965179473335252"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "SURGE",
-          "to_action": "QUIET",
-          "trade_count": "23",
-          "imbalance": "-0.32058172581115496"
-        },
-        {
-          "symbol": "ZVV",
+          "symbol": "ZVZZT",
           "from_action": "QUIET",
           "to_action": "HEATING",
-          "trade_count": "19",
-          "imbalance": "-0.04831627845211311"
+          "trade_count": "15",
+          "imbalance": "-0.4777795252424697"
         },
         {
-          "symbol": "ZVV",
-          "from_action": "HEATING",
-          "to_action": "QUIET",
-          "trade_count": "21",
-          "imbalance": "-0.3965238029939657"
-        },
-        {
-          "symbol": "ZVV",
+          "symbol": "ZWZZT",
           "from_action": "QUIET",
           "to_action": "HEATING",
           "trade_count": "16",
-          "imbalance": "0.21804445858652888"
+          "imbalance": "-0.3941344775618262"
         },
         {
-          "symbol": "ZVV",
-          "from_action": "HEATING",
-          "to_action": "QUIET",
-          "trade_count": "20",
-          "imbalance": "0.16220194052382067"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "QUIET",
-          "to_action": "SURGE",
-          "trade_count": "10",
-          "imbalance": "-0.3933163553115441"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "SURGE",
-          "to_action": "QUIET",
-          "trade_count": "17",
-          "imbalance": "0.1200185804059234"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "QUIET",
-          "to_action": "IMBALANCED",
-          "trade_count": "8",
-          "imbalance": "-0.7115139070103574"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "IMBALANCED",
-          "to_action": "HEATING",
-          "trade_count": "17",
-          "imbalance": "-0.4794303951245755"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "HEATING",
-          "to_action": "QUIET",
-          "trade_count": "19",
-          "imbalance": "0.5241488413805937"
-        },
-        {
-          "symbol": "ZVV",
+          "symbol": "ZJZZT",
           "from_action": "QUIET",
           "to_action": "HEATING",
-          "trade_count": "16",
-          "imbalance": "0.6607594058660617"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "HEATING",
-          "to_action": "SURGE",
-          "trade_count": "1",
-          "imbalance": "1"
-        },
-        {
-          "symbol": "ZVV",
-          "from_action": "SURGE",
-          "to_action": "QUIET",
           "trade_count": "13",
-          "imbalance": "-0.06185609468549278"
+          "imbalance": "-0.11015582918591538"
+        },
+        {
+          "symbol": "ZJZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "22",
+          "imbalance": "-0.04389637058275285"
+        },
+        {
+          "symbol": "ZXZZT",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "16",
+          "imbalance": "-0.6738272401353962"
+        },
+        {
+          "symbol": "ZXZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "22",
+          "imbalance": "0.26669307465103376"
+        },
+        {
+          "symbol": "ZBZX",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "15",
+          "imbalance": "-0.43093108780279243"
+        },
+        {
+          "symbol": "ZBZX",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "16",
+          "imbalance": "-0.04968091131741843"
+        },
+        {
+          "symbol": "ZVV",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "22",
+          "imbalance": "0.10507658385829266"
+        },
+        {
+          "symbol": "ZVV",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "13",
+          "imbalance": "-0.15875301858474128"
+        },
+        {
+          "symbol": "ZTEST",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "14",
+          "imbalance": "0.3033398362041322"
+        },
+        {
+          "symbol": "ZTEST",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "22",
+          "imbalance": "-0.1736296684442648"
+        },
+        {
+          "symbol": "ZVZZT",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "14",
+          "imbalance": "-0.03953037824383456"
+        },
+        {
+          "symbol": "ZVZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "18",
+          "imbalance": "-0.5449520314696547"
+        },
+        {
+          "symbol": "ZBZX",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "13",
+          "imbalance": "0.25529822858145373"
+        },
+        {
+          "symbol": "ZVV",
+          "from_action": "HEATING",
+          "to_action": "IMBALANCED",
+          "trade_count": "15",
+          "imbalance": "-0.9101463959006556"
+        },
+        {
+          "symbol": "ZWZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "25",
+          "imbalance": "-0.0312590899137988"
+        },
+        {
+          "symbol": "ZWZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "24",
+          "imbalance": "0.11198832735616225"
+        },
+        {
+          "symbol": "ZJZZT",
+          "from_action": "HEATING",
+          "to_action": "QUIET",
+          "trade_count": "18",
+          "imbalance": "0.057636251969240083"
+        },
+        {
+          "symbol": "ZTEST",
+          "from_action": "QUIET",
+          "to_action": "HEATING",
+          "trade_count": "11",
+          "imbalance": "-0.3070652249149882"
         }
       ]
     }
