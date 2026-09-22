@@ -355,6 +355,41 @@ function displayRows(rows) {
   });
 }
 
+function sortValue(row, column) {
+  const kind = column[3] || column[2];
+  const value = row[column[0]];
+  if (kind === "num" || kind === "signed") {
+    const n = num(value);
+    return n === null ? null : n;
+  }
+  if (value === null || value === undefined || value === "") return null;
+  return String(value);
+}
+
+function orderedRows(rows, columns, state) {
+  if (!state || state.index < 0) return displayRows(rows);
+  const column = columns[state.index];
+  const dir = state.dir || 1;
+  return rows.slice().sort((a, b) => {
+    const left = sortValue(a, column);
+    const right = sortValue(b, column);
+    if (left === null && right === null) return 0;
+    if (left === null) return 1;
+    if (right === null) return -1;
+    if (typeof left === "number" && typeof right === "number") return (left - right) * dir;
+    if (left < right) return -dir;
+    if (left > right) return dir;
+    return 0;
+  });
+}
+
+const viewSort = {};
+
+function viewState(id) {
+  if (!viewSort[id]) viewSort[id] = { index: -1, dir: 1 };
+  return viewSort[id];
+}
+
 function formatCell(value, kind) {
   if (value === null || value === undefined || value === "") return "";
   if (kind === "action") return value;
@@ -407,47 +442,74 @@ function navButton(id, title) {
   return button;
 }
 
+function setFold(button, drawer, open) {
+  button.setAttribute("aria-expanded", open ? "true" : "false");
+  drawer.classList.toggle("open", open);
+  drawer.toggleAttribute("inert", !open);
+}
+
+function makeFold(label, owns) {
+  const block = document.createElement("div");
+  block.className = "fold-block";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "fold";
+  button.dataset.owns = owns.join(",");
+  const name = document.createElement("span");
+  name.className = "fold-name";
+  name.textContent = label;
+  const chev = document.createElement("span");
+  chev.className = "chev";
+  chev.setAttribute("aria-hidden", "true");
+  button.append(name, chev);
+  const drawer = document.createElement("div");
+  drawer.className = "drawer";
+  const inner = document.createElement("div");
+  inner.className = "drawer-inner";
+  drawer.appendChild(inner);
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setFold(button, drawer, button.getAttribute("aria-expanded") !== "true");
+  });
+  setFold(button, drawer, false);
+  block.append(button, drawer);
+  return { block, inner, button, drawer };
+}
+
 function renderNav(activeId) {
   const rail = document.querySelector(".rail-groups");
   if (!rail.dataset.ready) {
-    const scroller = document.querySelector(".rail");
-    const scroll = scroller ? scroller.scrollTop : 0;
     rail.appendChild(navButton("overview", "Overview"));
-    const floorBlock = document.createElement("section");
-    floorBlock.className = "group";
-    const floorLabel = document.createElement("h2");
-    floorLabel.className = "group-label";
-    floorLabel.textContent = "Floor";
-    const nowLabel = document.createElement("h3");
-    nowLabel.className = "subgroup-label";
-    nowLabel.textContent = "Now";
-    floorBlock.append(floorLabel, nowLabel, navButton("floor", "Live floor"));
-    rail.appendChild(floorBlock);
+    const floor = makeFold("Floor", ["floor"]);
+    const now = makeFold("Now", ["floor"]);
+    now.block.classList.add("nested");
+    now.inner.appendChild(navButton("floor", "Live floor"));
+    floor.inner.appendChild(now.block);
+    rail.appendChild(floor.block);
     for (const group of GROUPS) {
-      const block = document.createElement("section");
-      block.className = "group";
-      const label = document.createElement("h2");
-      label.className = "group-label";
-      label.textContent = group.label;
-      block.appendChild(label);
+      const top = makeFold(group.label, group.features.map((feature) => feature.id));
       for (const sub of group.subgroups) {
-        const subLabel = document.createElement("h3");
-        subLabel.className = "subgroup-label";
-        subLabel.textContent = sub.label;
-        block.appendChild(subLabel);
+        const nested = makeFold(sub.label, sub.ids);
+        nested.block.classList.add("nested");
         for (const featureId of sub.ids) {
           const feature = group.features.find((item) => item.id === featureId);
-          block.appendChild(navButton(feature.id, feature.title));
+          nested.inner.appendChild(navButton(feature.id, feature.title));
         }
+        top.inner.appendChild(nested.block);
       }
-      rail.appendChild(block);
+      rail.appendChild(top.block);
     }
     rail.dataset.ready = "yes";
-    if (scroller) scroller.scrollTop = scroll;
   }
   rail.querySelectorAll(".nav-button").forEach((button) => {
     if (button.dataset.page === activeId) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
+  });
+  rail.querySelectorAll(".fold").forEach((button) => {
+    const owns = button.dataset.owns.split(",");
+    const on = owns.includes(activeId);
+    button.classList.toggle("branch", on);
+    if (on) setFold(button, button.nextElementSibling, true);
   });
 }
 
@@ -499,10 +561,8 @@ function renderOverview() {
     blurb.textContent = group.blurb;
     card.append(heading, tally, blurb);
     for (const sub of group.subgroups) {
-      const subLabel = document.createElement("h3");
-      subLabel.className = "subgroup-label";
-      subLabel.textContent = sub.label;
-      card.appendChild(subLabel);
+      const nested = makeFold(sub.label, sub.ids);
+      nested.block.classList.add("nested");
       for (const featureId of sub.ids) {
         const feature = group.features.find((item) => item.id === featureId);
         const button = document.createElement("button");
@@ -516,8 +576,9 @@ function renderOverview() {
         state.textContent = status.label;
         button.append(name, state);
         button.addEventListener("click", () => show(feature.id));
-        card.appendChild(button);
+        nested.inner.appendChild(button);
       }
+      card.appendChild(nested.block);
     }
     grid.appendChild(card);
   }
@@ -569,51 +630,122 @@ function renderFeature(id) {
     empty.textContent = "This sample does not contain rows yet.";
     sheet.appendChild(empty);
   } else {
+    const columns = found.feature.columns;
+    const state = viewState(id);
+    const menu = makeFold("Sort", []);
+    menu.block.classList.add("sort-menu");
+    function sortTitle() {
+      menu.button.querySelector(".fold-name").textContent = state.index < 0
+        ? "Sort · grouped"
+        : "Sort · " + columns[state.index][1] + (state.dir > 0 ? "  ↑" : "  ↓");
+    }
+    const grouped = document.createElement("button");
+    grouped.type = "button";
+    grouped.className = "sort-option";
+    grouped.textContent = "Grouped";
+    menu.inner.appendChild(grouped);
+    columns.forEach((column, index) => {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.className = "sort-option";
+      option.textContent = column[1];
+      option.addEventListener("click", () => choose(index));
+      menu.inner.appendChild(option);
+    });
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headRow = document.createElement("tr");
-    for (const column of found.feature.columns) {
-      const th = document.createElement("th");
-      th.textContent = column[1];
-      if (column[2] === "num") th.className = "num";
-      headRow.appendChild(th);
-    }
-    thead.appendChild(headRow);
     const tbody = document.createElement("tbody");
-    let previous = "";
-    for (const row of displayRows(rows)) {
-      const tr = document.createElement("tr");
-      const entity = row.userid || row.regionid || row.symbol || "";
-      if (entity !== previous) tr.className = "band";
-      previous = entity;
-      found.feature.columns.forEach((column, index) => {
-        const td = document.createElement("td");
-        const kind = column[3] || column[2];
-        const value = row[column[0]];
-        const classes = [];
-        if (index === 0) classes.push("entity");
-        if (column[2] === "action") {
-          const pill = document.createElement("span");
-          pill.className = "pill " + String(value || "");
-          pill.textContent = value || "";
-          td.appendChild(pill);
-        } else {
-          td.textContent = formatCell(value, kind);
-          if (column[2] === "num") classes.push("num");
-          if (column[2] === "time") classes.push("time");
-          const tone = cellClass(value, kind);
-          if (tone) classes.push(tone);
-        }
-        td.className = classes.join(" ");
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
+    function choose(index) {
+      if (index < 0) {
+        state.index = -1;
+        state.dir = 1;
+      } else if (state.index === index) {
+        state.dir *= -1;
+      } else {
+        state.index = index;
+        state.dir = 1;
+      }
+      setFold(menu.button, menu.drawer, false);
+      paint();
     }
+    grouped.addEventListener("click", () => choose(-1));
+    columns.forEach((column, index) => {
+      const th = document.createElement("th");
+      if (column[2] === "num") th.className = "num";
+      const control = document.createElement("button");
+      control.type = "button";
+      control.className = "sort-head";
+      const name = document.createElement("span");
+      name.textContent = column[1];
+      const mark = document.createElement("span");
+      mark.className = "sort-mark";
+      control.append(name, mark);
+      control.addEventListener("click", () => choose(index));
+      th.appendChild(control);
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    function paint() {
+      sortTitle();
+      menu.inner.querySelectorAll(".sort-option").forEach((option, index) => {
+        const selected = index === 0 ? state.index < 0 : state.index === index - 1;
+        if (selected) option.setAttribute("aria-current", "true");
+        else option.removeAttribute("aria-current");
+      });
+      headRow.querySelectorAll("th").forEach((th, index) => {
+        const mark = th.querySelector(".sort-mark");
+        const active = state.index === index;
+        th.querySelector(".sort-head").classList.toggle("active", active);
+        if (active) {
+          th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+          mark.textContent = state.dir > 0 ? "↑" : "↓";
+        } else {
+          th.removeAttribute("aria-sort");
+          mark.textContent = "";
+        }
+      });
+      tbody.innerHTML = "";
+      const banded = state.index < 0 || state.index === 0;
+      let previous = "";
+      for (const row of orderedRows(rows, columns, state)) {
+        const tr = document.createElement("tr");
+        const entity = row.userid || row.regionid || row.symbol || "";
+        if (banded && entity !== previous) tr.className = "band";
+        previous = entity;
+        columns.forEach((column, index) => {
+          const td = document.createElement("td");
+          const kind = column[3] || column[2];
+          const value = row[column[0]];
+          const classes = [];
+          if (index === 0) classes.push("entity");
+          if (column[2] === "action") {
+            const pill = document.createElement("span");
+            pill.className = "pill " + String(value || "");
+            pill.textContent = value || "";
+            td.appendChild(pill);
+          } else {
+            td.textContent = formatCell(value, kind);
+            if (column[2] === "num") classes.push("num");
+            if (column[2] === "time") classes.push("time");
+            const tone = cellClass(value, kind);
+            if (tone) classes.push(tone);
+          }
+          td.className = classes.join(" ");
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      }
+      tbody.classList.remove("settling");
+      void tbody.offsetWidth;
+      tbody.classList.add("settling");
+    }
+    paint();
     table.append(thead, tbody);
     const wrap = document.createElement("div");
     wrap.className = "table-wrap";
     wrap.appendChild(table);
-    sheet.appendChild(wrap);
+    sheet.append(menu.block, wrap);
   }
   main.appendChild(sheet);
 }
@@ -701,7 +833,55 @@ function renderFloor() {
   main.append(kicker, title, question, sheet);
 
   const columns = ["Symbol", "Live read", "Trades", "Customers", "Imbalance", "Last", "Stream action", "Evidence", "Last change", "10s", "1 min"];
+  const floorKeys = ["symbol", "liveRead", "liveCount", "liveCustomers", "liveImbalance", "lastPrice", "streamAction", "streamTs", "shiftTs", "windowCount", "horizonCount"];
   const numeric = { 2: true, 3: true, 4: true, 5: true, 9: true, 10: true };
+  const floorSort = { index: 0, dir: 1 };
+  let latest = null;
+  const sortMenu = makeFold("Sort", []);
+  sortMenu.block.classList.add("sort-menu");
+  function floorTitle() {
+    sortMenu.button.querySelector(".fold-name").textContent = "Sort · " + columns[floorSort.index] + (floorSort.dir > 0 ? "  ↑" : "  ↓");
+  }
+  columns.forEach((name, index) => {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "sort-option";
+    option.textContent = name;
+    option.addEventListener("click", () => chooseFloor(index));
+    sortMenu.inner.appendChild(option);
+  });
+  sheet.insertBefore(sortMenu.block, boardWrap);
+  function chooseFloor(index) {
+    if (floorSort.index === index) floorSort.dir *= -1;
+    else {
+      floorSort.index = index;
+      floorSort.dir = 1;
+    }
+    setFold(sortMenu.button, sortMenu.drawer, false);
+    if (latest) paint(latest, false);
+  }
+  function sortFloor(rows) {
+    const key = floorKeys[floorSort.index];
+    const dir = floorSort.dir;
+    const numericKey = numeric[floorSort.index] || key === "streamTs" || key === "shiftTs";
+    return rows.slice().sort((a, b) => {
+      const left = a[key];
+      const right = b[key];
+      if (numericKey) {
+        const na = num(left);
+        const nb = num(right);
+        if (na === null && nb === null) return 0;
+        if (na === null) return 1;
+        if (nb === null) return -1;
+        return (na - nb) * dir;
+      }
+      const sa = String(left || "");
+      const sb = String(right || "");
+      if (sa < sb) return -dir;
+      if (sa > sb) return dir;
+      return 0;
+    });
+  }
   let signature = null;
   let tapeSignature = "";
   const slots = {};
@@ -731,7 +911,6 @@ function renderFloor() {
   }
 
   function buildBoard(symbols) {
-    signature = symbols.map((row) => row.symbol).join("|");
     boardWrap.innerHTML = "";
     Object.keys(slots).forEach((key) => delete slots[key]);
     const table = document.createElement("table");
@@ -740,7 +919,6 @@ function renderFloor() {
     const groups = document.createElement("tr");
     const symbolHead = document.createElement("th");
     symbolHead.rowSpan = 2;
-    symbolHead.textContent = "Symbol";
     groups.appendChild(symbolHead);
     [["Tape", 5], ["Decision", 3], ["Closed windows", 2]].forEach((group) => {
       const th = document.createElement("th");
@@ -749,12 +927,33 @@ function renderFloor() {
       th.textContent = group[0];
       groups.appendChild(th);
     });
+    function sortCell(th, index) {
+      th.innerHTML = "";
+      if (numeric[index]) th.classList.add("num");
+      const control = document.createElement("button");
+      control.type = "button";
+      control.className = "sort-head";
+      const name = document.createElement("span");
+      name.textContent = columns[index];
+      const mark = document.createElement("span");
+      mark.className = "sort-mark";
+      control.append(name, mark);
+      control.addEventListener("click", () => chooseFloor(index));
+      th.appendChild(control);
+      const active = floorSort.index === index;
+      control.classList.toggle("active", active);
+      if (active) {
+        th.setAttribute("aria-sort", floorSort.dir > 0 ? "ascending" : "descending");
+        mark.textContent = floorSort.dir > 0 ? "↑" : "↓";
+      }
+    }
+    sortCell(symbolHead, 0);
     const head = document.createElement("tr");
     columns.forEach((name, index) => {
       if (index === 0) return;
       const th = document.createElement("th");
-      th.textContent = name;
       if (numeric[index]) th.className = "num";
+      sortCell(th, index);
       head.appendChild(th);
     });
     thead.append(groups, head);
@@ -841,10 +1040,18 @@ function renderFloor() {
     rateValue.textContent = String(state.perSecond);
     printValue.textContent = String(state.trades);
     streamValue.textContent = String(state.flink);
-    const symbols = state.symbols || [];
-    const next = symbols.map((row) => row.symbol).join("|");
-    if (!keepBoard || next !== signature) buildBoard(symbols);
-    else symbols.forEach(paintRow);
+    latest = state;
+    floorTitle();
+    sortMenu.inner.querySelectorAll(".sort-option").forEach((option, index) => {
+      if (floorSort.index === index) option.setAttribute("aria-current", "true");
+      else option.removeAttribute("aria-current");
+    });
+    const symbols = sortFloor(state.symbols || []);
+    const next = floorSort.index + ":" + floorSort.dir + ":" + symbols.map((row) => row.symbol).join("|");
+    if (!keepBoard || next !== signature) {
+      buildBoard(symbols);
+      signature = next;
+    } else symbols.forEach(paintRow);
     if (!keepBoard || state.tape) paintTape(state.tape || []);
   }
 

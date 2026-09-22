@@ -31,7 +31,7 @@ button, input { font: inherit; color: inherit; }
 
 .app {
   display: grid;
-  grid-template-columns: 248px 1fr;
+  grid-template-columns: 272px 1fr;
   min-height: 100%;
 }
 
@@ -76,19 +76,100 @@ button, input { font: inherit; color: inherit; }
   font-size: 10px;
 }
 
-.nav-button {
-  display: block;
+.fold-block { margin: 0 0 4px; }
+
+.fold-block.nested { margin: 0 0 2px 8px; }
+
+.fold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   width: 100%;
   margin: 0;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.fold:hover,
+.fold[aria-expanded="true"] {
+  background: var(--panel);
+  border-color: var(--line);
+}
+
+.fold.branch .fold-name { color: var(--accent); }
+
+.fold-block.nested .fold {
   padding: 7px 10px;
-  border: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.fold-name { font-weight: 600; }
+
+.chev {
+  width: 7px;
+  height: 7px;
+  margin-right: 2px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.32s ease;
+  flex: none;
+}
+
+.fold[aria-expanded="true"] .chev { transform: rotate(45deg); }
+
+.drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.drawer.open { grid-template-rows: 1fr; }
+
+.drawer-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.drawer.open .drawer-inner > * {
+  animation: rise 0.32s ease both;
+}
+
+.drawer.open .drawer-inner > *:nth-child(2) { animation-delay: 0.03s; }
+.drawer.open .drawer-inner > *:nth-child(3) { animation-delay: 0.06s; }
+.drawer.open .drawer-inner > *:nth-child(4) { animation-delay: 0.09s; }
+.drawer.open .drawer-inner > *:nth-child(5) { animation-delay: 0.12s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.nav-button {
+  display: block;
+  width: calc(100% - 8px);
+  margin: 2px 0 2px 8px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
   text-align: left;
   cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.nav-button:hover { background: rgba(255, 252, 247, 0.7); }
+.nav-button:hover {
+  background: var(--panel);
+  border-color: var(--line);
+  transform: translateX(4px);
+}
 
 .nav-button[aria-current="page"] {
   background: var(--accent-soft);
@@ -332,6 +413,74 @@ td.kind {
   text-transform: uppercase;
 }
 
+.sort-menu { max-width: 280px; margin: 0 0 12px; }
+
+.sort-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sort-option:hover { background: var(--paper); }
+
+.sort-option[aria-current="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sort-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+th.num .sort-head { float: right; }
+
+.sort-head.active { color: var(--ink); }
+
+.sort-mark {
+  display: inline-block;
+  width: 0.8em;
+  text-align: center;
+}
+
+tbody.settling { animation: settle 0.28s ease; }
+
+@keyframes settle {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .chev,
+  .nav-button,
+  .fold,
+  tbody.settling {
+    transition: none;
+    animation: none;
+  }
+  .drawer.open .drawer-inner > * { animation: none; }
+  .nav-button:hover { transform: none; }
+}
+
 @media (max-width: 800px) {
   .app { grid-template-columns: 1fr; }
   .rail {
@@ -344,13 +493,7 @@ td.kind {
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
-  .rail-groups {
-    display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    padding-bottom: 6px;
-  }
-  .group { min-width: 148px; margin: 0; }
+  .rail-groups { display: block; }
   .main { padding: 20px 16px 48px; }
   .summary { grid-template-columns: 1fr; }
   h1 { font-size: 26px; }
